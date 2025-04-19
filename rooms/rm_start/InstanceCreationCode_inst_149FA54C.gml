@@ -1,4 +1,4 @@
-target_x = 20;
-target_y = 120;
+target_x = LV1_X;
+target_y = LV1_Y;
 target_rm = rm_lv1;
 
