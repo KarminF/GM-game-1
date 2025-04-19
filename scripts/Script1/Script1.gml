@@ -1,0 +1,6 @@
+#macro FACE_RIGHT 0
+#macro FACE_LEFT 1
+#macro FACE_STILL_RIGHT 2
+#macro FACE_STILL_LEFT 3
+
+#macro MAX_JUMP_TIMES 2
