@@ -10,3 +10,7 @@
 #macro LV1_Y 120
 #macro LV2_X 20
 #macro LV2_Y 100
+
+
+
+#macro RESPAWN_BUTTON ord("R")

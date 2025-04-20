@@ -1,6 +1,7 @@
-var right_key = keyboard_check(ord("D"));
-var left_key = keyboard_check(ord("A"));
-
+var right_key = keyboard_check(ord("D")) || keyboard_check(vk_right);
+var left_key = keyboard_check(ord("A")) || keyboard_check(vk_left);
+var jump_key = keyboard_check_pressed(ord("W")) || keyboard_check_pressed(vk_space) || keyboard_check_pressed(vk_up);
+var jump_hold = keyboard_check(ord("W")) || keyboard_check(vk_space) || keyboard_check(vk_up);
 a_speed = (right_key - left_key) * acceleration;
 if ((sign(hsp) != sign(a_speed)) && (hsp != 0)){
 	hsp = 0;
@@ -15,7 +16,7 @@ if (!right_key && !left_key){
 // kill, die and respawn
 if place_meeting(x, y, obj_kill) is_dead = true;
 
-if keyboard_check_pressed(ord("R")) {
+if keyboard_check_pressed(RESPAWN_BUTTON) {
 	x = global.respawn_x;
 	y = global.respawn_y;
 	visible = true;
@@ -55,21 +56,22 @@ if (is_on_ground){
 	vsp += g;
 }
 
-if (keyboard_check_pressed(ord("W")) && jump_times > 0){
+if (jump_key && jump_times > 0 && is_on_ground){
+	vsp = jump_speed / 2;  // init jump speed if on ground, will be acclerated
 	jump_times -= 1;
 	jump_duration = 0;
-	if (!is_on_ground){		// fixed jump height if not ground jump
-		vsp = jump_speed * 3/4;
-	}
-}else if (keyboard_check_pressed(ord("W")) && extra_jump) {
+}else if (jump_key && extra_jump) {
 	vsp = jump_speed * 3/4;
 	extra_jump = false;
+}else if (jump_key && jump_times > 0 && !is_on_ground){	// fixed jump height if not ground jump
+	vsp = jump_speed * 3/4;
+	jump_times -= 1;
 }
 
 // ground jump will be higher if hold jump longer
-if (keyboard_check(ord("W")) && jump_times >= MAX_JUMP_TIMES - 1 && jump_duration < 8){
+if (jump_hold && jump_times >= MAX_JUMP_TIMES - 1 && jump_duration <= 10){
     jump_duration += 1;
-	vsp = lerp(jump_speed / 2, jump_speed * 3/4, 1 - jump_duration / 8);
+	vsp += lerp(0, jump_accleration, 1 - jump_duration / 10);
 }
 
 // h collisions
@@ -84,7 +86,8 @@ if (place_meeting(x, y + vsp, obj_wall_parent)) {
     vsp = 0;
 }
 
-vsp = clamp(vsp, -5, 5);
+show_debug_message(hsp)
+
 x += hsp;
 y += vsp;
 

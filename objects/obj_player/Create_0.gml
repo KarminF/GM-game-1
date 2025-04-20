@@ -1,9 +1,10 @@
 hsp = 0;
 vsp = 0;
 ms = 2;
-acceleration = 0.3;
+acceleration = 0.25;
 g = 0.2;
 jump_speed = -4;
+jump_accleration = -0.4;
 
 face_dir = 1;	// for the facing direction after stopping moving
 
