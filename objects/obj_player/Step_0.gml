@@ -2,7 +2,9 @@ var right_key = keyboard_check(ord("D")) || keyboard_check(vk_right);
 var left_key = keyboard_check(ord("A")) || keyboard_check(vk_left);
 var jump_key = keyboard_check_pressed(ord("W")) || keyboard_check_pressed(vk_space) || keyboard_check_pressed(vk_up);
 var jump_hold = keyboard_check(ord("W")) || keyboard_check(vk_space) || keyboard_check(vk_up);
+
 is_on_ground = place_meeting(x, y + 1, obj_wall_parent) ? true : false;
+is_on_vine = false;
 
 // run
 a_speed = (right_key - left_key) * acceleration;
@@ -51,6 +53,7 @@ if hsp > 0 {
 // jumping
 if (is_on_ground){
 	extra_jump = false;
+	vine_jump_times = 0;
 	jump_times = MAX_JUMP_TIMES;
     vsp = 0;
 	jump_duration = 0;
@@ -58,16 +61,33 @@ if (is_on_ground){
 	if (jump_times == MAX_JUMP_TIMES){	// if didn't jump but walked into air, jump_times -= 1
 		jump_times -= 1;
 	}
+	if (place_meeting(x, y, obj_vine)){
+		is_on_vine = true;
+	}
 	vsp += g;
+}
+
+if (is_on_vine){
+	vsp = clamp(vsp, 0, 2);
+	g = GRAVITY * 0.1;
+	vine_jump_times = MAX_JUMP_TIMES;
+	jump_times = 0;
+	extra_jump = false;
+}else{
+	g = GRAVITY;
 }
 
 if (jump_key && jump_times > 0 && is_on_ground){
 	vsp = jump_speed / 2;  // init jump speed if on ground, will be acclerated
 	jump_times -= 1;
 	jump_duration = 0;
-}else if (jump_key && extra_jump) {
+}else if (jump_key && (extra_jump || vine_jump_times > 0)) {
 	vsp = jump_speed * 3/4;
-	extra_jump = false;
+	if extra_jump {
+		extra_jump = false;
+	}else{
+		vine_jump_times -= 1;
+	}
 }else if (jump_key && jump_times > 0 && !is_on_ground){	// fixed jump height if not ground jump
 	vsp = jump_speed * 3/4;
 	jump_times -= 1;
@@ -78,6 +98,8 @@ if (jump_hold && jump_times >= MAX_JUMP_TIMES - 1 && jump_duration <= 10){
     jump_duration += 1;
 	vsp += lerp(0, jump_accleration, 1 - jump_duration / 10);
 }
+
+vsp = clamp(vsp, -5, 5);
 
 // h collisions
 if (place_meeting(x + hsp, y, obj_wall_parent)) {
@@ -95,23 +117,21 @@ if (place_meeting(x, y + vsp, obj_wall_parent)) {
 	y += vsp;
 }
 
-
 x = max(x, 0);
 y = max(y, 0);
 
-
 // level skip
-if keyboard_check_pressed(vk_numpad1){
+if keyboard_check_pressed(ord("1")){
 	room_goto(rm_lv1);
 	x = LV1_X;
 	y = LV1_Y;
 }
-if keyboard_check_pressed(vk_numpad2){
+if keyboard_check_pressed(ord("2")){
 	room_goto(rm_lv2);
 	x = LV2_X;
 	y = LV2_Y;
 }
-if keyboard_check_pressed(vk_numpad3){
+if keyboard_check_pressed(ord("3")){
 	room_goto(rm_lv3);
 	x = LV3_X;
 	y = LV3_Y;
@@ -119,4 +139,5 @@ if keyboard_check_pressed(vk_numpad3){
 
 // show_debug_message(place_meeting(x,y,obj_wall_parent));
 // show_debug_message(string(x)+" "+string(y)+" "+string(room));
-// show_debug_message(global.respawn_rm)
+// show_debug_message(global.respawn_rm);
+// show_debug_message(vsp);

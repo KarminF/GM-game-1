@@ -2,7 +2,7 @@ hsp = 0;
 vsp = 0;
 ms = 2;
 acceleration = 0.25;
-g = 0.2;
+g = GRAVITY;
 jump_speed = -4;
 jump_accleration = -0.4;
 
@@ -10,10 +10,10 @@ face_dir = 1;	// for the facing direction after stopping moving
 
 is_dead = false;
 
-is_flat_ground = false;
-
 is_jumping = false;
 is_on_ground = true;
+is_on_vine = false;
+vine_jump_times = MAX_JUMP_TIMES;
 jump_times = MAX_JUMP_TIMES;
 jump_duration = 0;
 extra_jump = false;

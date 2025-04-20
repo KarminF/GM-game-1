@@ -5,13 +5,15 @@
 
 #macro MAX_JUMP_TIMES 2
 
+#macro GRAVITY 0.2
+
 // enter coordinates
 #macro LV1_X 20
 #macro LV1_Y 120
 #macro LV2_X 20
 #macro LV2_Y 100
 #macro LV3_X 20
-#macro LV3_Y 100
+#macro LV3_Y 170
 
 
 
