@@ -10,6 +10,8 @@ face_dir = 1;	// for the facing direction after stopping moving
 
 is_dead = false;
 
+is_flat_ground = false;
+
 is_jumping = false;
 is_on_ground = true;
 jump_times = MAX_JUMP_TIMES;

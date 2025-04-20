@@ -10,7 +10,16 @@
 #macro LV1_Y 120
 #macro LV2_X 20
 #macro LV2_Y 100
+#macro LV3_X 20
+#macro LV3_Y 100
 
 
 
 #macro RESPAWN_BUTTON ord("R")
+#macro SAVE_BUTTON ord("S")
+
+
+// init respawn
+global.respawn_rm = rm_start;
+global.respawn_x = 20;
+global.respawn_y = 120;
